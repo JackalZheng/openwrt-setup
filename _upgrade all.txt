@@ -1,0 +1,57 @@
+############snapshot
+echo "src/gz openwrt-vlmcsd https://dwfreed.github.io/openwrt-vlmcsd/OpenWrt_23.05/mipsel_24kc/base" >> /etc/opkg/customfeeds.conf
+opkg update
+opkg install luci-compat luci-i18n-acme-zh-tw luci-i18n-base-zh-tw luci-i18n-firewall-zh-tw luci-i18n-opkg-zh-tw 
+opkg install luci-i18n-samba4-zh-tw luci-i18n-sqm-zh-tw luci-i18n-transmission-zh-tw luci-i18n-upnp-zh-tw 
+opkg install luci-mod-admin-full luci-proto-ipv6 luci-proto-ppp luci-proto-relay  luci-theme-material
+opkg install bind-dig vlmcsd openssl-util wget ca-bundle ca-certificates
+opkg install adguardhome block-mount kmod-fs-ext4 kmod-usb-storage transmission-daemon-openssl
+opkg install nginx-full luci-ssl-nginx nginx-mod-dav-ext nginx-mod-luci nginx-mod-luci-ssl nginx-mod-ubus uwsgi-luci-support
+opkg install https://github.com/cokebar/luci-app-vlmcsd/releases/download/v1.0.2-1/luci-app-vlmcsd_1.0.2-1_all.ipk
+sed -i 's/usb-storage/usb-storage quirks=152d:1576:u/g' /etc/modules.d/usb-storage
+chmod 777 /etc/memclean.sh
+
+############release
+opkg update
+#opkg install lighttpd lighttpd-mod-accesslog lighttpd-mod-access lighttpd-mod-alias lighttpd-mod-auth lighttpd-mod-authn_file lighttpd-mod-cgi lighttpd-mod-fastcgi lighttpd-mod-trigger_b4_dl lighttpd-mod-webdav lighttpd-mod-rewrite
+opkg install uwsgi-luci-support nginx-all-module
+opkg install block-mount kmod-fs-ext4 kmod-usb-storage usbreset luci-i18n-samba-zh-tw
+opkg install apache bind-dig luci-proto-relay luci-i18n-base-zh-tw luci-app-sqm transmission-daemon-openssl luci-i18n-transmission-zh-tw
+opkg install wget ca-certificates openssl-util ca-bundle luci-theme-material
+sed -i 's/usb-storage/usb-storage quirks=152d:1576:u/g' /etc/modules.d/usb-storage
+
+
+usbreset
+[[[sed -i 's/usb-storage/usb-storage quirks=152d:1576:u/g' /etc/modules.d/usb-storage]]]
+
+htpasswd -c /etc/nginx/.htpasswd home              #035288206
+htpasswd -c /etc/lighttpd/.htpasswd home              #035288206
+
+
+ luci-i18n-samba4-zh-tw
+
+#https wget
+opkg install ca-bundle ca-certificates libustream-openssl20150806
+
+opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade 
+
+
+opkg remove lighttpd lighttpd-mod-accesslog lighttpd-mod-access lighttpd-mod-alias lighttpd-mod-auth lighttpd-mod-authn_file lighttpd-mod-cgi lighttpd-mod-fastcgi lighttpd-mod-trigger_b4_dl lighttpd-mod-webdav lighttpd-mod-rewrite
+
+opkg install luci-proto-ppp luci-proto-ipv6 luci-proto-relay
+
+opkg install luci-i18n-base-zh-tw luci-mod-admin-full luci-theme-material luci-i18n-opkg-zh-tw
+opkg install lighttpd-mod-accesslog lighttpd-mod-access lighttpd-mod-alias lighttpd-mod-auth lighttpd-mod-authn_file lighttpd-mod-cgi lighttpd-mod-fastcgi lighttpd-mod-trigger_b4_dl lighttpd-mod-webdav lighttpd
+opkg install luci-i18n-transmission-zh-tw transmission-daemon-openssl transmission-web 
+opkg install luci-app-sqm
+opkg install block-mount kmod-fs-ext4 kmod-usb-storage usbreset
+
+
+sed -i 's/usb-storage/usb-storage quirks=152d:1576:u/g' /etc/modules.d/usb-storage
+
+
+
+#https wget
+opkg install ca-bundle ca-certificates libustream-openssl20150806
+
+opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade 
